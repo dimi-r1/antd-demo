@@ -7,6 +7,7 @@ import {
   WalletOutlined,
   AlertOutlined,
   AppstoreOutlined,
+  BgColorsOutlined,
 } from "@ant-design/icons";
 
 const { Sider } = Layout;
@@ -54,6 +55,11 @@ const DashboardSidebar = ({
       key: "cashflow",
       icon: <WalletOutlined />,
       label: "Cash Flow",
+    },
+    {
+      key: "theme",
+      icon: <BgColorsOutlined />,
+      label: "Theme Designer",
     },
     {
       key: "showcase",

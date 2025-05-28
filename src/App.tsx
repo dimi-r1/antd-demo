@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { ConfigProvider, Layout, Tabs, theme, type TabsProps } from "antd";
+import type { ThemeConfig } from "antd/es/config-provider/context";
 import DashboardHeader from "./components/layout/DashboardHeader";
 import DashboardSidebar from "./components/layout/DashboardSidebar";
 import PortfolioOverview from "./components/portfolio/PortfolioOverview";
@@ -11,6 +12,7 @@ import CashFlowChart from "./components/cash/CashFlowChart";
 import TradeModal from "./components/trading/TradeModal";
 import MarketInsightsDrawer from "./components/insights/MarketInsightsDrawer";
 import ComponentShowcase from "./components/showcase/ComponentShowcase";
+import ThemeCustomizer from "./components/theme/ThemeCustomizer";
 import {
   mockPortfolios,
   mockAssets,
@@ -32,7 +34,7 @@ const createTheme = (
   primaryBorderHover: string,
   primaryHover: string,
   primaryActive: string
-) => ({
+): ThemeConfig => ({
   algorithm: theme.defaultAlgorithm,
   token: {
     // Primary Colors
@@ -72,7 +74,6 @@ const createTheme = (
     colorInfoHover: "#1976d2",
     colorInfoActive: "#1565c0",
 
-    // Gray Scale (from your color system)
     // colorBgBase: "#ffffff", // White
     // colorBgContainer: "#fafafa", // Gray 5
     // colorBgElevated: "#ffffff",
@@ -101,13 +102,11 @@ const createTheme = (
     fontSizeHeading3: 20, // Large
     fontSizeHeading4: 16, // Medium
     fontSizeHeading5: 14, // Small
-    fontSizeHeading6: 12, // XSmall
 
     // Line Heights
     lineHeight: 1.5,
     lineHeightLG: 1.5,
     lineHeightSM: 1.25,
-    lineHeightHeading: 1.25,
 
     // Font Weights
     fontWeightStrong: 600,
@@ -120,7 +119,6 @@ const createTheme = (
     paddingMD: 20, // 5 tokens
     paddingLG: 24, // 6 tokens
     paddingXL: 32, // 8 tokens
-    paddingXXL: 40, // 10 tokens
     margin: 16,
     marginXXS: 4,
     marginXS: 8,
@@ -141,7 +139,6 @@ const createTheme = (
     boxShadow: "none", // Layer 0 - Alert
     boxShadowSecondary: "0 2px 4px rgba(0, 0, 0, 0.1)", // Layer 1 - Select menu (SM)
     boxShadowTertiary: "0 4px 8px rgba(0, 0, 0, 0.12)", // Layer 2 - Dropdown, Toast (MD)
-    boxShadowPopover: "0 8px 24px rgba(0, 0, 0, 0.12)", // Layer 3 - Modal, Dialog, Drawer (LG)
 
     // Control Heights
     controlHeight: 32,
@@ -157,9 +154,6 @@ const createTheme = (
     // Z-index (matching your elevation layers)
     zIndexBase: 0,
     zIndexPopupBase: 1000, // Layer 1
-    zIndexPopover: 1030, // Layer 2
-    zIndexModal: 1050, // Layer 3
-    zIndexDrawer: 1300, // Layer 3 (same as modal but higher for drawer)
   },
   components: {
     // Button customizations
@@ -260,7 +254,7 @@ const createTheme = (
   },
 });
 
-// Theme configurations
+// Default red theme configuration
 const redTheme = createTheme(
   "#d6002a", // Primary red 100
   "#ffebee", // Light red background
@@ -271,8 +265,9 @@ const redTheme = createTheme(
   "#8d0000" // Even darker for active
 );
 
+// Default green theme configuration
 const greenTheme = createTheme(
-  "#4caf50", // Primary green
+  "#4caf50", // Primary green 100
   "#e8f5e9", // Light green background
   "#c8e6c9",
   "#a5d6a7",
@@ -286,7 +281,33 @@ function App() {
   const [activeKey, setActiveKey] = useState("overview");
   const [isTradeModalVisible, setIsTradeModalVisible] = useState(false);
   const [isInsightsDrawerVisible, setIsInsightsDrawerVisible] = useState(false);
-  const [currentTheme, setCurrentTheme] = useState<"red" | "green">("red");
+
+  // Initialize theme state from localStorage or defaults
+  const [themeState, setThemeState] = useState<{
+    currentTheme: "red" | "green" | "custom";
+    customThemeConfig: ThemeConfig;
+  }>(() => {
+    try {
+      const saved = localStorage.getItem("antd-theme-customizer");
+      if (saved) {
+        const savedTheme = JSON.parse(saved) as ThemeConfig;
+        if (savedTheme && typeof savedTheme === "object") {
+          return {
+            currentTheme: "custom",
+            customThemeConfig: savedTheme,
+          };
+        }
+      }
+    } catch (_error) {
+      // Fallback to default if saved theme is invalid
+    }
+    return {
+      currentTheme: "red",
+      customThemeConfig: redTheme,
+    };
+  });
+
+  const { currentTheme, customThemeConfig } = themeState;
 
   const handleTabChange = (key: string) => {
     if (key === "trade") {
@@ -298,12 +319,41 @@ function App() {
     }
   };
 
-  const handleColorToggle = (theme: "red" | "green") => {
-    setCurrentTheme(theme);
-  };
+  const handleColorToggle = useCallback((theme: "red" | "green") => {
+    const selectedTheme = theme === "red" ? redTheme : greenTheme;
+    setThemeState({
+      currentTheme: theme,
+      customThemeConfig: selectedTheme,
+    });
+    // Clear localStorage when switching to presets
+    localStorage.removeItem("antd-theme-customizer");
+  }, []);
 
-  // Select the current theme
-  const selectedTheme = currentTheme === "red" ? redTheme : greenTheme;
+  const handleThemeChange = useCallback((newTheme: ThemeConfig) => {
+    setThemeState({
+      currentTheme: "custom",
+      customThemeConfig: newTheme,
+    });
+    // Save custom theme to localStorage immediately
+    localStorage.setItem("antd-theme-customizer", JSON.stringify(newTheme));
+  }, []);
+
+  const handlePresetSelect = useCallback((_preset: "red") => {
+    setThemeState({
+      currentTheme: "red",
+      customThemeConfig: redTheme,
+    });
+    // Clear localStorage when switching to presets
+    localStorage.removeItem("antd-theme-customizer");
+  }, []);
+
+  // Select the current theme - use red, green, or custom theme
+  const selectedTheme =
+    currentTheme === "red"
+      ? redTheme
+      : currentTheme === "green"
+      ? greenTheme
+      : customThemeConfig;
 
   const tabItems: TabsProps["items"] = [
     {
@@ -340,6 +390,18 @@ function App() {
       key: "cashflow",
       label: "Cash Flow",
       children: <CashFlowChart cashFlows={mockCashFlows} />,
+    },
+    {
+      key: "theme",
+      label: "Theme Designer",
+      children: (
+        <ThemeCustomizer
+          currentTheme={selectedTheme}
+          onThemeChange={handleThemeChange}
+          onPresetSelect={handlePresetSelect}
+          currentPreset={currentTheme}
+        />
+      ),
     },
   ];
 
