@@ -116,7 +116,7 @@ const ThemeCustomizer: React.FC<ThemeCustomizerProps> = ({
           level={5}
           style={{ margin: 0, display: "flex", alignItems: "center", gap: 8 }}
         >
-          {group.icon}
+          <span>{group.icon}</span>
           {group.title}
         </Title>
         <Text type="secondary" style={{ fontSize: 12 }}>

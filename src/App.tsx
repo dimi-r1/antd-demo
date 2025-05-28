@@ -74,7 +74,6 @@ const createTheme = (
     colorInfoHover: "#1976d2",
     colorInfoActive: "#1565c0",
 
-    // Gray Scale (from your color system)
     // colorBgBase: "#ffffff", // White
     // colorBgContainer: "#fafafa", // Gray 5
     // colorBgElevated: "#ffffff",
@@ -108,7 +107,6 @@ const createTheme = (
     lineHeight: 1.5,
     lineHeightLG: 1.5,
     lineHeightSM: 1.25,
-    lineHeightHeading: 1.25,
 
     // Font Weights
     fontWeightStrong: 600,
@@ -121,7 +119,6 @@ const createTheme = (
     paddingMD: 20, // 5 tokens
     paddingLG: 24, // 6 tokens
     paddingXL: 32, // 8 tokens
-    paddingXXL: 40, // 10 tokens
     margin: 16,
     marginXXS: 4,
     marginXS: 8,
@@ -142,7 +139,6 @@ const createTheme = (
     boxShadow: "none", // Layer 0 - Alert
     boxShadowSecondary: "0 2px 4px rgba(0, 0, 0, 0.1)", // Layer 1 - Select menu (SM)
     boxShadowTertiary: "0 4px 8px rgba(0, 0, 0, 0.12)", // Layer 2 - Dropdown, Toast (MD)
-    boxShadowPopover: "0 8px 24px rgba(0, 0, 0, 0.12)", // Layer 3 - Modal, Dialog, Drawer (LG)
 
     // Control Heights
     controlHeight: 32,
@@ -158,9 +154,6 @@ const createTheme = (
     // Z-index (matching your elevation layers)
     zIndexBase: 0,
     zIndexPopupBase: 1000, // Layer 1
-    zIndexPopover: 1030, // Layer 2
-    zIndexModal: 1050, // Layer 3
-    zIndexDrawer: 1300, // Layer 3 (same as modal but higher for drawer)
   },
   components: {
     // Button customizations
