@@ -4,7 +4,7 @@ A modern financial dashboard built with React, TypeScript, Vite, and Ant Design.
 
 ## 🚀 Live Demo
 
-Visit the live demo: [https://dimi.github.io/antd-demo](https://dimi.github.io/antd-demo)
+Visit the live demo: [https://dimi-r1.github.io/antd-demo](https://dimi-r1.github.io/antd-demo)
 
 ## 📋 Features
 
@@ -36,7 +36,7 @@ Visit the live demo: [https://dimi.github.io/antd-demo](https://dimi.github.io/a
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/dimi/antd-demo.git
+git clone https://github.com/dimi-r1/antd-demo.git
 cd antd-demo
 ```
 
