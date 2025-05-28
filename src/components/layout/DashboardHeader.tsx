@@ -25,7 +25,7 @@ interface DashboardHeaderProps {
   onNotificationClick: () => void;
   notificationCount: number;
   onColorToggle: (theme: "red" | "green") => void;
-  currentTheme?: "red" | "green";
+  currentTheme?: "red" | "green" | "custom";
 }
 
 const DashboardHeader = ({
@@ -138,6 +138,8 @@ const DashboardHeader = ({
               height: 24,
               fontSize: 11,
               fontWeight: 500,
+              backgroundColor: currentTheme === "green" ? "#4caf50" : undefined,
+              borderColor: currentTheme === "green" ? "#4caf50" : undefined,
             }}
           >
             Green
