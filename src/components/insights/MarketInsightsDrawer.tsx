@@ -132,13 +132,20 @@ const MarketInsightsDrawer = ({
       width={480}
       extra={
         <Space>
-          <Button size="small" onClick={() => console.log("Mark all as read")}>
+          <Button
+            size="small"
+            onClick={() => {
+              /* Mark all as read */
+            }}
+          >
             Mark All Read
           </Button>
           <Button
             size="small"
             type="primary"
-            onClick={() => console.log("Settings")}
+            onClick={() => {
+              /* Open settings */
+            }}
           >
             Settings
           </Button>
@@ -274,11 +281,18 @@ const MarketInsightsDrawer = ({
             <Button
               type="primary"
               block
-              onClick={() => console.log("View detailed analytics")}
+              onClick={() => {
+                /* View detailed analytics */
+              }}
             >
               View Detailed Analytics
             </Button>
-            <Button block onClick={() => console.log("Export insights")}>
+            <Button
+              block
+              onClick={() => {
+                /* Export insights */
+              }}
+            >
               Export Insights Report
             </Button>
           </Space>

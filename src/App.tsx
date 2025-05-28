@@ -387,8 +387,8 @@ function App() {
         <TradeModal
           visible={isTradeModalVisible}
           onClose={() => setIsTradeModalVisible(false)}
-          onSubmit={(tradeData) => {
-            console.log("Trade submitted:", tradeData);
+          onSubmit={(_tradeData) => {
+            // Handle trade submission - in a real app, this would call an API
             setIsTradeModalVisible(false);
           }}
         />
